@@ -1,115 +1,96 @@
-# OptimizerLab
-### Gradient Descent vs RMSProp vs Adam Comparison
+# 🚀 Deep Learning Optimizer Comparison: SGD vs. RMSProp vs. Adam
 
-OptimizerLab is an interactive machine learning project that demonstrates and compares three popular optimization algorithms used in training machine learning models:
-
-- Gradient Descent
-- RMSProp
-- Adam
-
-The goal of this project is to help users understand how these optimizers behave during training and how quickly they converge to the minimum of a loss function.
+This project serves as an empirical study on the performance, convergence speed, and stability of different optimization algorithms in Deep Learning. Using a **Linear Regression** architecture built with **PyTorch**, we predict housing prices using the real-world **California Housing Dataset**.
 
 ---
 
-## Project Overview
-
-Optimization algorithms play a critical role in machine learning by minimizing the loss function and improving model performance.
-
-This project provides a visual and interactive way to compare how different optimizers update parameters during training.
-
-Users can run experiments and observe how the optimizers move toward the minimum point.
+## 📌 1. Objective
+The primary goal is to demonstrate how different optimizers navigate the loss landscape. We compare:
+* **Stochastic Gradient Descent (SGD):** The baseline optimization algorithm.
+* **RMSProp:** An adaptive learning rate method that tackles diminishing gradients.
+* **Adam:** A combination of momentum and adaptive scaling, often considered the industry standard.
 
 ---
 
-## Features
-
-- Compare Gradient Descent, RMSProp, and Adam
-- Interactive parameter control
-- Visualization of optimizer behavior
-- Loss vs Epoch comparison graphs
-- Optimization path visualization
-- Performance comparison table
-- Simple and interactive UI
+## 📊 2. Dataset Used
+**California Housing Dataset** (Scikit-Learn)
+* **Features:** 8 numerical features including `MedInc` (Median Income), `HouseAge`, `AveRooms`, etc.
+* **Target:** Median house value for California districts (expressed in hundreds of thousands of dollars).
+* **Size:** 20,640 samples.
 
 ---
 
-## How It Works
+## 🧠 3. Mathematical Concept
 
-The system optimizes a function or trains a simple machine learning model using different optimizers.
+The model minimizes the **Mean Squared Error (MSE)** loss function:
+$$J(\theta) = \frac{1}{n} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2$$
 
-### Steps
-
-1. Initialize model parameters
-2. Compute prediction
-3. Calculate loss
-4. Compute gradients
-5. Update parameters using the selected optimizer
-6. Track performance metrics
-7. Display results using graphs and tables
-
----
-
-## Optimizers Implemented
-
-### Gradient Descent
-
-Gradient Descent is the most basic optimization algorithm. It updates parameters in the direction of the negative gradient of the loss function.
-
-Update rule:
-
-θ = θ − α ∇J(θ)
-
-Where:
-
-θ = model parameters  
-α = learning rate  
-∇J(θ) = gradient of the loss function
+### Optimizers Compared:
+1. **SGD:** Updates parameters by moving in the opposite direction of the gradient.
+   $$\theta_{t+1} = \theta_t - \eta \cdot \nabla J(\theta_t)$$
+2. **RMSProp:** Scales the learning rate by a moving average of the squared gradients.
+   $$v_t = \beta v_{t-1} + (1-\beta)g_t^2 \implies \theta_{t+1} = \theta_t - \frac{\eta}{\sqrt{v_t + \epsilon}}g_t$$
+3. **Adam:** Combines the advantages of both Adagrad and RMSProp using first and second moment estimates.
+   $$\theta_{t+1} = \theta_t - \frac{\eta \cdot \hat{m}_t}{\sqrt{\hat{v}_t} + \epsilon}$$
 
 ---
 
-### RMSProp
+## ⚙️ 4. Methodology & Project Steps
 
-RMSProp adapts the learning rate for each parameter by dividing the gradient by a moving average of squared gradients.
+### Step 1: Environment Setup
+* Install Python 3.9+.
+* Install dependencies: `torch`, `streamlit`, `scikit-learn`, `pandas`, `matplotlib`.
 
-This helps stabilize training and speeds up convergence.
+### Step 2: Data Preprocessing
+* Load data and perform **Standardization** (scaling features to zero mean and unit variance). This is critical for gradient-based optimizers to converge effectively.
 
----
+### Step 3: Architecture
+* Define a single-layer Linear Regression model using `torch.nn.Module`.
 
-### Adam
+### Step 4: Training Loop
+* Train the model three separate times using identical initial weights but different optimizers.
+* Track the loss at every epoch for comparison.
 
-Adam (Adaptive Moment Estimation) combines the benefits of Momentum and RMSProp.
-
-It keeps track of both:
-
-- First moment (mean of gradients)
-- Second moment (variance of gradients)
-
-Adam is widely used in modern deep learning because of its fast convergence and stability.
-
----
-
-## Visualizations
-
-The project provides several visual outputs:
-
-- Loss vs Epochs graph
-- Optimizer convergence comparison
-- Optimization path on function surface
-- Final performance metrics table
-
-These visualizations help users understand the behavior of each optimizer.
+### Step 5: Visualization & Deployment
+* Use **Streamlit** to create an interactive dashboard for hyperparameter tuning (learning rate, epochs).
+* Plot loss curves to visualize convergence.
 
 ---
 
-## Tech Stack
+## 📈 5. Results & Results Analysis
+Based on the experiments conducted:
+
+Adam typically shows the fastest convergence, reaching the lowest MSE in fewer than 100 epochs.
+
+RMSProp is stable and avoids the oscillations often seen in vanilla SGD.
+
+SGD requires a much smaller learning rate to avoid "exploding gradients" and takes longer to reach the global minimum.
+
+---
+
+## 🎯 6. Conclusion
+This project highlights that while traditional Gradient Descent is the foundation of deep learning, adaptive optimizers like Adam and RMSProp are significantly more efficient for high-dimensional, real-world datasets. For house price prediction, Adam provides the most robust and rapid path to a localized minimum.
+
+---
+
+
+## 🛠️ 7. Built With
+PyTorch - Deep Learning Framework
+Streamlit - Web App Framework
+Scikit-Learn - Machine Learning Tools
+
+---
+
+## 8. Tech Stack
 
 Programming Language:
 - Python
 
-Libraries:
+Libraries & Frameworks
 - NumPy
 - Matplotlib
 - Pandas
+- Pytorch
 
 Web Interface:
 - Streamlit
@@ -120,79 +101,3 @@ Version Control:
 
 ---
 
--------------------------------------------------
-OptimizerLab
-Gradient Descent vs RMSProp vs Adam
--------------------------------------------------
-
-Controls                     Results
-
-Optimizer: [Compare All ▼]   Loss vs Epoch Graph
-
-Learning Rate: [0.01]        Optimizer Path Graph
-
-Epochs: [100]                Performance Table
-
-Start Point: [8]
-
-[ Run Simulation ]
-[ Reset ]
-
----
-
-## Project Structure
-
-optimizerlab/
-│
-├── app.py
-├── optimizers.py
-├── model.py
-├── visualization.py
-├── requirements.txt
-└── README.md
-
----
-
-## Example Use Case
-
-Users can experiment with different parameters such as:
-
-- Learning rate
-- Number of epochs
-- Starting point
-
-They can run simulations and observe how each optimizer converges toward the minimum.
-
----
-
-## Results
-
-Typical observations:
-
-- Gradient Descent converges slowly
-- RMSProp converges faster by adapting learning rates
-- Adam converges fastest and provides stable results
-
----
-
-## Future Improvements
-
-Possible future enhancements include:
-
-- Adding more optimizers
-- Support for multiple datasets
-- 3D loss surface visualization
-- Neural network training experiments
-- Hyperparameter tuning interface
-
----
-
-## Author
-
-Raj Darlami
-
----
-
-## License
-
-This project is developed for educational purposes.
