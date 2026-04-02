@@ -35,12 +35,12 @@ df, feature_names = load_data()
 
 # Sidebar UI
 st.sidebar.header("Hyperparameters")
-optimizer_choice = st.sidebar.selectbox("Choose Optimizer", ["All (Comparison Mode)", "SGD", "RMSProp", "Adam"])
+optimizer_choice = st.sidebar.selectbox("Choose Optimizer", ["(SGD vs RMSProp vs Adam)", "SGD", "RMSProp", "Adam"])
 lr = st.sidebar.slider("Learning Rate", 0.001, 0.5, 0.01, format="%.3f")
 epochs = st.sidebar.slider("Epochs", 50, 500, 200)
 
 # Step 3 & 4: Explore Data & Visualize Relationships
-with st.expander("Step 3 & 4: Explore & Visualize Data"):
+with st.expander("Explore & Visualize Data"):
     st.write(df.head())
     fig, ax = plt.subplots(figsize=(8, 4))
     sns.histplot(df['Price'], bins=50, kde=True, ax=ax)
@@ -98,7 +98,7 @@ def train_model(opt_name, X_t, y_t, lr, epochs):
 
 if st.button("Run Training"):
     # Step 7 & 8: Train, Predict, and Evaluate
-    optimizers_to_run = ["SGD", "RMSProp", "Adam"] if optimizer_choice == "All (Comparison Mode)" else [optimizer_choice]
+    optimizers_to_run = ["SGD", "RMSProp", "Adam"] if optimizer_choice == "(SGD vs RMSProp vs Adam)" else [optimizer_choice]
     
     results = {}
     models = {}
@@ -142,7 +142,7 @@ if st.button("Run Training"):
         ax_pred.set_title(f"Model Accuracy ({best_opt})")
         st.pyplot(fig_pred)
 
-    st.subheader("Step 8: Evaluation Metrics")
+    st.subheader("Evaluation Metrics")
     metrics_df = []
     for opt in optimizers_to_run:
         models[opt].eval()
@@ -155,7 +155,7 @@ if st.button("Run Training"):
     st.table(pd.DataFrame(metrics_df))
 
     # Step 10: Conclusion
-    st.markdown("### Step 10: Conclusion")
+    st.markdown("### Conclusion")
     st.markdown("""
     * **SGD** usually takes the longest to converge and might require a very carefully tuned learning rate.
     * **RMSProp** adapts the learning rate based on recent gradient magnitudes, leading to faster and smoother convergence than SGD.
