@@ -46,7 +46,7 @@ elif dataset_choice == "OpenML (Fetch by ID)":
 
 st.sidebar.header("2. Hyperparameters")
 optimizer_choice = st.sidebar.selectbox("Choose Optimizer", ["(SGD vs RMSProp vs Adam)", "SGD", "RMSProp", "Adam"])
-lr = st.sidebar.slider("Learning Rate", 0.001, 0.5, 0.01, format="%.3f")
+lr = st.sidebar.slider("Learning Rate", 0.001, 0.5, 0.1, format="%.3f")
 epochs = st.sidebar.slider("Epochs", 50, 500, 200)
 
 # Step 3: Load Dataset Dynamically
@@ -210,9 +210,13 @@ if st.button("Run Training"):
             r2 = r2_score(y_test, preds)
             metrics_df.append({"Optimizer": opt, "Test MSE": mse, "R2 Score": r2})
             
-    st.table(pd.DataFrame(metrics_df))
-
-    # Step 10: Conclusion
+    metrics_dataframe = pd.DataFrame(metrics_df)
+    st.table(metrics_dataframe)
+    
+    # Dynamically Determine the Winner
+    if len(optimizers_to_run) > 1:
+        best_optimizer = metrics_dataframe.loc[metrics_dataframe['Test MSE'].idxmin()]['Optimizer']
+        st.success(f"🏆 **Winner for this configuration:** {best_optimizer} achieved the lowest Test MSE!")    # Step 10: Conclusion
     st.markdown("### Conclusion")
     st.markdown("""
     * **SGD** usually takes the longest to converge and might require a very carefully tuned learning rate.
